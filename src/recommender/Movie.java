@@ -1,6 +1,7 @@
 package recommender;
 
 public class Movie {
-
-    // load files
+private String movieId;
+private String title;
+private String genres;
 }
