@@ -29,7 +29,6 @@ public class Ratings {
                 if (i % 4 == 3) {
                     timestamp = Double.parseDouble(splitLine[i]);
                 }
-
             }
 
         } catch (FileNotFoundException e) {
@@ -38,6 +37,12 @@ public class Ratings {
 
 
     }
+
+    public String getUserId() {return userId;}
+
+    public String getMovieId() {return movieId;}
+
+    public double getRating() {return rating;}
 
 
 }
