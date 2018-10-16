@@ -14,7 +14,7 @@ public class MovieRecommender {
      * @param args argument to the program
      */
     public static void main(String[] args) {
-        // FILL IN CODE
-
+        RatingsCollection collection = new RatingsCollection();
+        collection.printMap();
     }
 }

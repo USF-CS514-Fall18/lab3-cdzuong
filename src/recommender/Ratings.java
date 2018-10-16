@@ -9,9 +9,8 @@ public class Ratings {
     private String userId;
     private String movieId;
     private double rating;
-    private double timestamp;
 
-    public Ratings(String filename) {
+    public Ratings() {
         try {
             File file = new File("input/newSet/ratings.csv");
             Scanner input = new Scanner(file);
@@ -25,9 +24,6 @@ public class Ratings {
                 }
                 if (i % 4 == 2) {
                     rating = Double.parseDouble(splitLine[i]);
-                }
-                if (i % 4 == 3) {
-                    timestamp = Double.parseDouble(splitLine[i]);
                 }
             }
 
