@@ -15,7 +15,11 @@ public class MovieRecommender {
      */
     public static void main(String[] args) {
         RatingsCollection collection = new RatingsCollection();
-        collection.addRatings("input/newSet/ratings.csv");
-      collection.printMap();
+      //  collection.addRatings("input/newSet/ratings.csv");
+     //collection.printMap();
+
+      MovieCollection movCollection = new MovieCollection();
+      movCollection.addMovie("input/newSet/movies.csv");
+      movCollection.printMap();
     }
 }
