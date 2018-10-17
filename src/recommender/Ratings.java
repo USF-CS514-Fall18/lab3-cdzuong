@@ -14,7 +14,7 @@ public class Ratings {
         try {
             File file = new File("input/newSet/ratings.csv");
             Scanner input = new Scanner(file);
-            String splitLine[] = input.nextLine().split(", ");
+            String splitLine[] = input.next().split(", ");
             for (int i = 0; i < splitLine.length; i++) {
                 if (i % 4 == 0) {
                     userId = splitLine[i];

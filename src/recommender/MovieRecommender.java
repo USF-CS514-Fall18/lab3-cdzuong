@@ -11,10 +11,11 @@ public class MovieRecommender {
      *  args[1] path to the folder where  to save recommendations and antiRecommendations
      *  args[2] id of the user for whom to compute recommendations (and anti-recommendations)
      *  args[3] number of recommendations (and anti-recommendations) to write to a file.
-     * @param args argument to the program
+     * @param args\argument to the program
      */
     public static void main(String[] args) {
         RatingsCollection collection = new RatingsCollection();
-        collection.printMap();
+        collection.addRatings("input/newSet/ratings.csv");
+      collection.printMap();
     }
 }
