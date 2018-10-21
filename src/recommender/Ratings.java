@@ -2,31 +2,34 @@ package recommender;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 public class Ratings {
 
-    private String userId;
-    private String movieId;
+    private int userId;
+    private int movieId;
     private double rating;
 
-    public Ratings() {
-        try {
-            File file = new File("input/newSet/ratings.csv");
-            Scanner input = new Scanner(file);
-            String splitLine[] = input.next().split(", ");
-            for (int i = 0; i < splitLine.length; i++) {
-                if (i % 4 == 0) {
-                    userId = splitLine[i];
-                }
-                if (i % 4 == 1) {
-                    movieId = splitLine[i];
-                }
-                if (i % 4 == 2) {
-                    rating = Double.parseDouble(splitLine[i]);
-                }
-            }
+    public Ratings(int userId, int movieId, double rating) {
+        this.userId = userId;
+        this.movieId = movieId;
+        this.rating = rating;
+    }
 
+    public Ratings(String filename) {
+        try {
+            File file = new File(filename);
+            Scanner input = new Scanner(file);
+            input.nextLine();
+            RatingsCollection addRating = new RatingsCollection();
+            while (input.hasNextLine()) {
+                String[] splitLine = input.nextLine().split(",");
+                userId = Integer.parseInt(splitLine[0]);
+                movieId = Integer.parseInt(splitLine[1]);
+                rating = Double.parseDouble(splitLine[2]);
+            }
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
         }
@@ -34,9 +37,9 @@ public class Ratings {
 
     }
 
-    public String getUserId() {return userId;}
+    public int getUserId() {return userId;}
 
-    public String getMovieId() {return movieId;}
+    public int getMovieId() {return movieId;}
 
     public double getRating() {return rating;}
 

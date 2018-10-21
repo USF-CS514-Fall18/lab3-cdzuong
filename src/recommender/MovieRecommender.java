@@ -14,12 +14,15 @@ public class MovieRecommender {
      * @param args\argument to the program
      */
     public static void main(String[] args) {
-        RatingsCollection collection = new RatingsCollection();
-      //  collection.addRatings("input/newSet/ratings.csv");
-     //collection.printMap();
-
+      RatingsCollection collection = new RatingsCollection();
+      collection.addRatings("input/newSet/ratings.csv");
+//    //collection.printMap();
+//
       MovieCollection movCollection = new MovieCollection();
-      movCollection.addMovie("input/newSet/movies.csv");
-      movCollection.printMap();
+    movCollection.addMovie("input/newSet/movies.csv");
+//   // movCollection.printMap();
+
+        collection.rValue(1);
+
     }
 }

@@ -7,10 +7,14 @@ import java.util.Scanner;
 import java.util.TreeMap;
 
 public class RatingsCollection {
-    private Map<String, Map<String, String>> ratingsMap;
+    private Map<Integer, Map<Integer, Double>> ratingsMap;
 
     public RatingsCollection() {
         ratingsMap = new TreeMap<>();
+    }
+
+    public Map getRatingsMap() {
+        return ratingsMap;
     }
 
     public void addRatings(String dir) {
@@ -18,39 +22,90 @@ public class RatingsCollection {
             File file = new File(dir);
             Scanner input = new Scanner(file);
             input.nextLine();
-            String userId = "";
-            String movieId = "";
-            String rating = "";
-            int i = 0;
+            int userId;
+            int movieId;
+            double rating;
             while (input.hasNextLine()) {
                 String[] splitLine = input.nextLine().split(",");
-                userId = splitLine[0];
-                System.out.println(userId);
-                movieId = splitLine[1];
-                System.out.println(movieId);
-                rating = splitLine[2];
-                System.out.println(rating);
+                userId = Integer.parseInt(splitLine[0]);
+                movieId = Integer.parseInt(splitLine[1]);
+                rating = Double.parseDouble(splitLine[2]);
                 if (!ratingsMap.containsKey(userId)) {
                     ratingsMap.put(userId, new TreeMap<>());
                 }
-                Map<String, String> ratingsSub;
+                Map<Integer, Double> ratingsSub;
                 ratingsSub = ratingsMap.get(userId);
                 ratingsSub.put(movieId, rating);
-
-                i++;
             }
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
         }
     }
 
-    public void printMap() {
-        for (Map.Entry<String, Map<String, String>> printer : ratingsMap.entrySet()) {
-            for (Map.Entry<String, String> ratingEntry : printer.getValue().entrySet()) {
-                System.out.println(ratingEntry.toString());
+    public void swapR(int compare) {
+        MovieCollection movieColl = new MovieCollection();
+
+        for (Map.Entry<Integer, Map<Integer, Double>> printer : ratingsMap.entrySet()) {
+
+            if (printer.getKey() != compare) {
+                for (Map.Entry<Integer, Double> ratingEntry : printer.getValue().entrySet()) {
+
+
+                }
             }
         }
     }
 
 
+    public void rValue(int compare) {
+        Movie movieIdSearcher = new Movie();
+        double ratingUser;
+        double ratingOthers;
+        double sumProducts = 0;
+        double sumUser = 0;
+        double sumOther = 0;
+        double sumUserSq = 0;
+        double sumOtherSq = 0;
+        double numerator;
+        double denominator;
+        double rValue;
+
+        for (Map.Entry<Integer, Map<Integer, Double>> printer : ratingsMap.entrySet()) {
+
+            if (compare != printer.getKey()) {
+
+                for (Map.Entry<Integer, Double> ratingEntry : printer.getValue().entrySet()) {
+
+                    for (Map.Entry<Integer, Map<Integer, Double>> printer2 : ratingsMap.entrySet()) {
+                        for (Map.Entry<Integer, Double> ratingEntry2 : printer2.getValue().entrySet()) {
+
+                            if (ratingEntry2.getKey() == ratingEntry.getKey()) {
+                                ratingUser = ratingEntry2.getValue();
+                                ratingOthers = ratingEntry.getValue();
+
+                                sumProducts += ratingUser * ratingOthers;
+                                sumUser += ratingUser;
+                                sumOther += ratingOthers;
+
+                                numerator = sumProducts - (sumUser * sumOther);
+
+                                sumUserSq += Math.pow(ratingUser, 2);
+                                sumOtherSq += Math.pow(ratingOthers, 2);
+                                System.out.println(ratingEntry.getKey() + " " + ratingEntry2.getKey());
+                                System.out.println(ratingUser + " " + ratingOthers);
+                            }
+
+                        }
+                    }
+                }
+
+            }
+
+
+        }
+
+    }
+
 }
+
+
