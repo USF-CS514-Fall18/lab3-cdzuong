@@ -70,42 +70,43 @@ public class RatingsCollection {
         double denominator;
         double rValue;
 
-        for (Map.Entry<Integer, Map<Integer, Double>> printer : ratingsMap.entrySet()) {
 
+        Map<Integer, Double> printer2 = ratingsMap.get(compare);
+
+        for (Map.Entry<Integer, Map<Integer, Double>> printer : ratingsMap.entrySet()) {
+            System.out.println("new user!");
             if (compare != printer.getKey()) {
 
                 for (Map.Entry<Integer, Double> ratingEntry : printer.getValue().entrySet()) {
 
-                    for (Map.Entry<Integer, Map<Integer, Double>> printer2 : ratingsMap.entrySet()) {
-                        for (Map.Entry<Integer, Double> ratingEntry2 : printer2.getValue().entrySet()) {
+                    for (Map.Entry<Integer, Double> ratingEntry2 : printer2.entrySet()) {
 
-                            if (ratingEntry2.getKey() == ratingEntry.getKey()) {
-                                ratingUser = ratingEntry2.getValue();
-                                ratingOthers = ratingEntry.getValue();
+                        if (ratingEntry2.getKey() == ratingEntry.getKey()) {
+                            ratingUser = ratingEntry2.getValue();
+                            ratingOthers = ratingEntry.getValue();
 
-                                sumProducts += ratingUser * ratingOthers;
-                                sumUser += ratingUser;
-                                sumOther += ratingOthers;
+                            sumProducts += ratingUser * ratingOthers;
+                            sumUser += ratingUser;
+                            sumOther += ratingOthers;
 
-                                numerator = sumProducts - (sumUser * sumOther);
+                            numerator = sumProducts - (sumUser * sumOther);
 
-                                sumUserSq += Math.pow(ratingUser, 2);
-                                sumOtherSq += Math.pow(ratingOthers, 2);
-                                System.out.println(ratingEntry.getKey() + " " + ratingEntry2.getKey());
-                                System.out.println(ratingUser + " " + ratingOthers);
-                            }
-
+                            sumUserSq += Math.pow(ratingUser, 2);
+                            sumOtherSq += Math.pow(ratingOthers, 2);
+                            System.out.println(ratingEntry.getKey() + " " + ratingEntry2.getKey());
+                            System.out.println(ratingUser + " " + ratingOthers);
                         }
+
                     }
                 }
-
             }
 
-
         }
-
     }
 
 }
+
+
+
 
 

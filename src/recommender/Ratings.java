@@ -12,6 +12,8 @@ public class Ratings {
     private int movieId;
     private double rating;
 
+    public Ratings(){}
+
     public Ratings(int userId, int movieId, double rating) {
         this.userId = userId;
         this.movieId = movieId;
