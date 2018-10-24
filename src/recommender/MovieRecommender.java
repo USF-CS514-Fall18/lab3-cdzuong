@@ -22,7 +22,11 @@ public class MovieRecommender {
     movCollection.addMovie("input/newSet/movies.csv");
 //   // movCollection.printMap();
 
-        collection.rValue(1);
+
+
+        collection.rankList();
+
+        collection.listTransfer();
 
     }
 }
