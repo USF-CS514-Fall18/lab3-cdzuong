@@ -232,6 +232,9 @@ public class RatingsCollection {
 
     public void listTransfer() {
 
+
+
+
         for (Map.Entry<Double, Map<Integer, Integer>> ratingEntry : rankMovies.entrySet()) {
             for (Map.Entry<Integer, Integer> ratingEntry2 : ratingEntry.getValue().entrySet()) {
                 if (ratingEntry.getKey() == 5.0) {
