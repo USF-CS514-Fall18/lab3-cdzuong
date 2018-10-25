@@ -191,20 +191,21 @@ public class RatingsCollection {
     /**
      * Creates movie recommendations and antirecommendations based on
      * the users whose movie preferences match most with the user in question
+     *
      * @param compare userID for the user recommendations are being made for
-     * @param n number of movie recommendations to make
-     * @param dir directory in which the movie list is found
+     * @param n       number of movie recommendations to make
+     * @param dir     directory in which the movie list is found
      */
     public void makeStarMovieList(int compare, int n, String dir) {
         TreeMap<Integer, Double> compareMap = ratingsMap.get(compare);
-            for (Double movieIdRatings : rankMovies.keySet()) {
-                if (!movieMap.containsKey(movieIdRatings)) {
-                    movieMap.put(movieIdRatings, new ArrayList<>());
-                }
-                ArrayList<Movie> movieList;
-                movieList = movieMap.get(movieIdRatings);
-                for (Integer movieID : rankMovies.get(movieIdRatings).keySet()) {
-                    for (Integer movieIDCompare : compareMap.keySet()) {
+        for (Double movieIdRatings : rankMovies.keySet()) {
+            if (!movieMap.containsKey(movieIdRatings)) {
+                movieMap.put(movieIdRatings, new ArrayList<>());
+            }
+            ArrayList<Movie> movieList;
+            movieList = movieMap.get(movieIdRatings);
+            for (Integer movieID : rankMovies.get(movieIdRatings).keySet()) {
+                for (Integer movieIDCompare : compareMap.keySet()) {
                     if (!movieIDCompare.equals(movieID)) {
 
                         movieList.add(rankMovies.get(movieIdRatings).get(movieID));
@@ -212,6 +213,10 @@ public class RatingsCollection {
                     }
                 }
             }
+        }
+
+        for (Double rating : movieMap.keySet()) {
+            movieMap.get(rating).sort(new MovieYearComparator());
         }
 
         MovieCollection movieColl = new MovieCollection();
