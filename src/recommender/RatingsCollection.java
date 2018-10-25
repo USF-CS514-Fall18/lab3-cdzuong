@@ -2,6 +2,7 @@ package recommender;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -196,7 +197,7 @@ public class RatingsCollection {
      * @param n       number of movie recommendations to make
      * @param dir     directory in which the movie list is found
      */
-    public void makeStarMovieList(int compare, int n, String dir) {
+    public void makeStarMovieList(int compare, int n, String dir, String write) {
         TreeMap<Integer, Double> compareMap = ratingsMap.get(compare);
         for (Double movieIdRatings : rankMovies.keySet()) {
             if (!movieMap.containsKey(movieIdRatings)) {
@@ -221,31 +222,39 @@ public class RatingsCollection {
 
         MovieCollection movieColl = new MovieCollection();
         movieColl.addMovie(dir + "/movies.csv");
+        String rec;
 
-
-        System.out.println("Recommendations");
-        if (n <= movieMap.get(5.0).size()) {
-            for (int i = 0; i < n; i++) {
-                System.out.println(movieMap.get(5.0).get(i).getTitle() + " (" + movieMap.get(5.0).get(i).getYear() + ")");
+        try (PrintWriter recs = new PrintWriter(new File(write + "recs.csv"))) {
+            if (n <= movieMap.get(5.0).size()) {
+                for (int i = 0; i < n; i++) {
+                    rec = movieMap.get(5.0).get(i).getTitle() + " (" + movieMap.get(5.0).get(i).getYear() + ")";
+                    recs.println(rec);
+                }
+            } else {
+                System.out.println("Choose a different number.");
             }
-        } else {
-            System.out.println("Choose a different number.");
+            recs.flush();
+        } catch (FileNotFoundException e) {
+            System.out.println("Cannot write recommendations.");
         }
-
-        System.out.println();
-        System.out.println("Anti-Recommendations");
-        for (int i = 0; i < highRUsers.size(); i++) {
-            for (Integer movieID : ratingsMap.get(highRUsers.get(i)).keySet()) {
-                if (ratingsMap.get(highRUsers.get(i)).get(movieID) <= 1.5) {
-                    antiMovies.add(movieColl.getMap().get(movieID));
+        try (PrintWriter antiPrint = new PrintWriter(new File(write + "antirecs.csv"))) {
+            System.out.println();
+            for (int i = 0; i < highRUsers.size(); i++) {
+                for (Integer movieID : ratingsMap.get(highRUsers.get(i)).keySet()) {
+                    if (ratingsMap.get(highRUsers.get(i)).get(movieID) <= 1.5) {
+                        antiMovies.add(movieColl.getMap().get(movieID));
+                    }
                 }
             }
-        }
 
-        antiMovies.sort(new MovieYearComparator());
-
-        for (int i = 0; i < n; i++) {
-            System.out.println(antiMovies.get(i).getTitle() + " (" + antiMovies.get(i).getYear() + ")");
+            antiMovies.sort(new MovieYearComparator());
+            String antirec;
+            for (int i = 0; i < n; i++) {
+                antirec = antiMovies.get(i).getTitle() + " (" + antiMovies.get(i).getYear() + ")";
+                antiPrint.println(antirec);
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Cannot write anti-recommendations.");
         }
 
 

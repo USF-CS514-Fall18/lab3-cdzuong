@@ -19,6 +19,6 @@ public class MovieRecommender {
         collection.addRatings(args[0]);
         collection.rValue(Integer.parseInt(args[2]));
         collection.rankList(args[0]);
-        collection.makeStarMovieList(Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[0]);
+        collection.makeStarMovieList(Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[0], args[1]);
     }
 }
