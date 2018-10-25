@@ -24,9 +24,8 @@ public class MovieRecommender {
         collection.rValue(3);
 
         collection.rankList("input/newSet/movies.csv");
-        collection.printRankList("input/newSet/movies.csv");
 
-        collection.makeStarMovieList(8, "input/newSet/movies.csv");
+        collection.makeStarMovieList(3,8, "input/newSet/movies.csv");
 
 
     }

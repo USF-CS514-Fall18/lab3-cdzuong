@@ -15,6 +15,7 @@ public class RatingsCollection {
     private ArrayList<Integer> highRUsers;
     private ArrayList<Movie> antiMovies;
     private ArrayList<Movie> highMovies;
+    private ArrayList<Movie> compareMovies;
 
     /**
      * RatingsCollection constructor.
@@ -40,12 +41,20 @@ public class RatingsCollection {
     }
 
     /**
-     * @return
+     * Returns the map containing userIDs, movie IDs, and ratings.
+     *
+     * @return TreeMap corresponding to userIDs, movie IDs, and ratings.
      */
     public Map getRatingsMap() {
         return ratingsMap;
     }
 
+    /**
+     * Adds ratings to the ratingsMap TreeMap. Assigns userIDs as keys
+     * and a nested TreeMap with movieID as key and movie rating as a double.
+     *
+     * @param dir Directory in which the file can be found.
+     */
     public void addRatings(String dir) {
         try {
             File file = new File(dir);
@@ -73,9 +82,15 @@ public class RatingsCollection {
         }
     }
 
-
+    /**
+     * Calculates the Pearson correlation coefficient between a given
+     * user and all users in the database.
+     *
+     * @param compare the userID of the user in question.
+     * @return The user whose movie preferences match most with the user
+     * in question.
+     */
     public int rValue(int compare) {
-
 
         double xratingUser = 0.0;
         double yratingOthers = 0.0;
@@ -91,21 +106,13 @@ public class RatingsCollection {
         double rValue = 0;
         double rMax = -1;
 
-        double keep = 0;
         int count = 0;
-
-        Map<Integer, Double> printer2 = ratingsMap.get(compare);
-
 
         for (Integer userID : ratingsMap.keySet()) {
             if (userID != compare) {
                 for (Integer movieID : ratingsMap.get(userID).keySet()) {
-
-                    // Have comparison ID, iterate through to to calculate r
-                    // values vs other users
                     for (Integer movieID2 : ratingsMap.get(compare).keySet()) {
                         if (movieID.equals(movieID2)) {
-                            System.out.println(userID + " (" + movieID + ") == " + compare + " (" + movieID2 + ") ? " + (movieID.equals(movieID2)));
                             xratingUser = ratingsMap.get(compare).get(movieID2);
                             yratingOthers = ratingsMap.get(userID).get(movieID);
                             sumProducts += (xratingUser * yratingOthers);
@@ -118,13 +125,11 @@ public class RatingsCollection {
                     }
                 }
 
-
                 numerator = (count * sumProducts) - (sumUser * sumOther);
                 den1 = (count * sumUserSq) - Math.pow(sumUser, 2);
                 den2 = (count * sumOtherSq) - Math.pow(sumOther, 2);
                 denominator = sqrt(den1) * sqrt(den2);
                 rValue = numerator / denominator;
-                System.out.println("rVal" + rValue);
 
                 if (rValue > rMax) {
                     rMax = rValue;
@@ -135,9 +140,6 @@ public class RatingsCollection {
                     highRUsers.add(userID);
                 }
 
-                if (denominator != 0) {
-                    System.out.println("userId: " + userID + " // rValue: " + rValue + "// rMax: " + rMax);
-                }
                 sumProducts = 0;
                 sumUser = 0;
                 sumOther = 0;
@@ -148,20 +150,17 @@ public class RatingsCollection {
             }
         }
 
-
-        System.out.println(rMax);
-//                if (rValue > rMax) {
-//                    rMax = rValue;
-//                    this.userMax = printer.getKey();
-
         return userMax;
     }
 
-
+    /**
+     * Creates a TreeMap containing the movie ratings and movie information
+     * of the user whose movie preferences match most with those of the user
+     * in question
+     *
+     * @param dir
+     */
     public void rankList(String dir) {
-
-        System.out.println("rankList started");
-        int innerMovieId;
         double rating;
         MovieCollection movieColl = new MovieCollection();
         TreeMap<Integer, Double> userRatingMap = ratingsMap.get(userMax);
@@ -189,62 +188,31 @@ public class RatingsCollection {
         }
     }
 
+    /**
+     * Creates movie recommendations and antirecommendations based on
+     * the users whose movie preferences match most with the user in question
+     * @param compare userID for the user recommendations are being made for
+     * @param n number of movie recommendations to make
+     * @param dir directory in which the movie list is found
+     */
+    public void makeStarMovieList(int compare, int n, String dir) {
+        TreeMap<Integer, Double> compareMap = ratingsMap.get(compare);
+            for (Double movieIdRatings : rankMovies.keySet()) {
+                if (!movieMap.containsKey(movieIdRatings)) {
+                    movieMap.put(movieIdRatings, new ArrayList<>());
+                }
+                ArrayList<Movie> movieList;
+                movieList = movieMap.get(movieIdRatings);
+                for (Integer movieID : rankMovies.get(movieIdRatings).keySet()) {
+                    for (Integer movieIDCompare : compareMap.keySet()) {
+                    if (!movieIDCompare.equals(movieID)) {
 
-    public void printRankList(String dir) {
-        MovieCollection movieColl = new MovieCollection();
-        movieColl.addMovie(dir);
-
-        System.out.println("size " + rankMovies.size());
-        for (Double rating : rankMovies.keySet()) {
-            for (Integer movieId : rankMovies.get(rating).keySet()) {
-                System.out.println("rating:" + rating + " movieId:" + movieId + "title: " + movieColl.getMap().get(movieId).getTitle());
+                        movieList.add(rankMovies.get(movieIdRatings).get(movieID));
+                        break;
+                    }
+                }
             }
         }
-    }
-
-
-    public void makeStarMovieList(int n, String dir) {
-        System.out.println("List Transfer Starting");
-
-
-        //take rankMovies and go one star at a time
-        //create array list
-        // sort array list.
-
-        for (Double movieIdRatings : rankMovies.keySet()) {
-            if (!movieMap.containsKey(movieIdRatings)) {
-                movieMap.put(movieIdRatings, new ArrayList<>());
-            }
-            ArrayList<Movie> movieList;
-            movieList = movieMap.get(movieIdRatings);
-            for (Integer movieID : rankMovies.get(movieIdRatings).keySet()) {
-                movieList.add(rankMovies.get(movieIdRatings).get(movieID));
-            }
-        }
-
-        System.out.println("breakpoint");
-        for (Double rating : movieMap.keySet()) {
-            for (int i = 0; i < movieMap.get(rating).size(); i++) {
-                System.out.println(movieMap.get(rating).get(i).getYear());
-            }
-
-            (movieMap.get(rating)).sort(new MovieYearComparator());
-            System.out.println();
-            System.out.println("after");
-            (movieMap.get(rating)).sort(new MovieYearComparator());
-            for (int i = 0; i < rankMovies.get(rating).size(); i++) {
-                System.out.println(movieMap.get(rating).get(i).getYear());
-            }
-        }
-
-        System.out.println("the entire map");
-        for (Double rating : movieMap.keySet()) {
-            for (int i = movieMap.get(rating).size() - 1; i > 0; i--) {
-                System.out.println("rating: " + rating + "// year " + movieMap.get(rating).get(i).getYear() + " " + movieMap.get(rating).get(i).getTitle());
-            }
-        }
-
-        System.out.println("entire map printed!");
 
         MovieCollection movieColl = new MovieCollection();
         movieColl.addMovie(dir);
@@ -258,7 +226,6 @@ public class RatingsCollection {
         } else {
             System.out.println("Choose a different number.");
         }
-
 
         System.out.println();
         System.out.println("Anti-Recommendations");
@@ -281,56 +248,3 @@ public class RatingsCollection {
 
 
 }
-
-
-//        System.out.println("testing movie list");
-//        for (int i = 0; i < movieList.size(); i++) {
-//            System.out.println(movieList.get(i).getTitle());
-//        }
-
-
-//        for (Map.Entry<Double, Map<Integer, Movie>> ratingEntry : rankMovies.entrySet()) {
-//            for (Map.Entry<Integer, Movie> ratingEntry2 : ratingEntry.getValue().entrySet()) {
-//                movieId = ratingEntry2.getKey();
-//                System.out.println(ratingEntry2.getValue().getYear());
-
-
-// this is the 5 star rankings
-// call out the Movie objects for each item
-// take out the year
-// comparator the year
-// add to arraylist
-// continue for 4 star rankings, etc
-
-
-//    public void sortList() {
-//        System.out.println("reached sortList");
-//        for (int i = 0; i < movieList.size(); i++) {
-//            System.out.println("BEFORE SORT");
-//            System.out.println(movieList.get(i).getTitle());
-//        }
-//        movieList.sort(new MovieYearComparator());
-//
-//        for (int i = 0; i < movieList.size(); i++) {
-//            System.out.println("AFTER SORT");
-//            System.out.println(movieList.get(i).getTitle());
-//        }
-//
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
