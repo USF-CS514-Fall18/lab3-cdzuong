@@ -21,11 +21,11 @@ public class MovieRecommender {
         MovieCollection movCollection = new MovieCollection();
         movCollection.addMovie("input/newSet/movies.csv");
 
-        collection.rValue(3);
+        collection.rValue(Integer.parseInt(args[2]));
 
         collection.rankList("input/newSet/movies.csv");
 
-        collection.makeStarMovieList(3,8, "input/newSet/movies.csv");
+        collection.makeStarMovieList(Integer.parseInt(args[2]), Integer.parseInt(args[2]), "input/newSet/movies.csv");
 
 
     }
