@@ -12,6 +12,9 @@ public class RatingsCollection {
     private int userMax;
     private TreeMap<Double, TreeMap<Integer, Movie>> rankMovies;
     private TreeMap<Double, ArrayList<Movie>> movieMap;
+    private ArrayList<Integer> highRUsers;
+    private ArrayList<Movie> antiMovies;
+    private ArrayList<Movie> highMovies;
 
     /**
      * RatingsCollection constructor.
@@ -21,6 +24,9 @@ public class RatingsCollection {
         userMax = 1;
         rankMovies = new TreeMap<>();
         movieMap = new TreeMap<>();
+        highRUsers = new ArrayList<>();
+        antiMovies = new ArrayList<>();
+        highMovies = new ArrayList<>();
     }
 
     /**
@@ -99,7 +105,7 @@ public class RatingsCollection {
                     // values vs other users
                     for (Integer movieID2 : ratingsMap.get(compare).keySet()) {
                         if (movieID.equals(movieID2)) {
-                            System.out.println(userID + " (" + movieID + ") == " + compare + " ("+movieID2+") ? "+(movieID.equals(movieID2)));
+                            System.out.println(userID + " (" + movieID + ") == " + compare + " (" + movieID2 + ") ? " + (movieID.equals(movieID2)));
                             xratingUser = ratingsMap.get(compare).get(movieID2);
                             yratingOthers = ratingsMap.get(userID).get(movieID);
                             sumProducts += (xratingUser * yratingOthers);
@@ -125,6 +131,10 @@ public class RatingsCollection {
                     this.userMax = userID;
                 }
 
+                if (rValue > 0.85) {
+                    highRUsers.add(userID);
+                }
+
                 if (denominator != 0) {
                     System.out.println("userId: " + userID + " // rValue: " + rValue + "// rMax: " + rMax);
                 }
@@ -137,7 +147,6 @@ public class RatingsCollection {
 
             }
         }
-
 
 
         System.out.println(rMax);
@@ -194,7 +203,7 @@ public class RatingsCollection {
     }
 
 
-    public void makeStarMovieList(int n) {
+    public void makeStarMovieList(int n, String dir) {
         System.out.println("List Transfer Starting");
 
 
@@ -237,32 +246,36 @@ public class RatingsCollection {
 
         System.out.println("entire map printed!");
 
+        MovieCollection movieColl = new MovieCollection();
+        movieColl.addMovie(dir);
+
+
         System.out.println("Recommendations");
-        for (int i = movieMap.get(5.0).size() - 1; i > movieMap.get(5.0).size() - (n + 1); i--) {
-            System.out.println(movieMap.get(5.0).get(i).getYear() + " " + movieMap.get(5.0).get(i).getTitle());
-        }
-
-
-        System.out.println("Anti-Recommendations");
-        if (movieMap.get(0.0) != null) {
-            for (int i = movieMap.get(0.0).size() - 1; i > movieMap.get(0.0).size() - (n + 1); i--) {
-                System.out.println(movieMap.get(0.0).get(i).getYear() + " " + movieMap.get(0.0).get(i).getTitle());
-            }
-        } else if (movieMap.get(0.5) != null) {
-            for (int i = movieMap.get(0.5).size() - 1; i > movieMap.get(0.0).size() - (n + 1); i--) {
-                System.out.println(movieMap.get(0.5).get(i).getYear() + " " + movieMap.get(0.5).get(i).getTitle());
-            }
-        } else if (movieMap.get(1.0) != null) {
-            for (int i = movieMap.get(1.0).size() - 1; i > movieMap.get(0.0).size() - (n + 1); i--) {
-                System.out.println(movieMap.get(1.0).get(i).getYear() + " " + movieMap.get(1.0).get(i).getTitle());
-            }
-        } else if (movieMap.get(1.5) != null) {
-            for (int i = movieMap.get(1.5).size() - 1; i > movieMap.get(0.0).size() - (n + 1); i--) {
-                System.out.println(movieMap.get(1.5).get(i).getYear() + " " + movieMap.get(1.5).get(i).getTitle());
+        if (n <= movieMap.get(5.0).size()) {
+            for (int i = 0; i < n; i++) {
+                System.out.println(movieMap.get(5.0).get(i).getYear() + " " + movieMap.get(5.0).get(i).getTitle());
             }
         } else {
-            System.out.println("No anti-recommendations to make.");
+            System.out.println("Choose a different number.");
         }
+
+
+        System.out.println();
+        System.out.println("Anti-Recommendations");
+        for (int i = 0; i < highRUsers.size(); i++) {
+            for (Integer movieID : ratingsMap.get(highRUsers.get(i)).keySet()) {
+                if (ratingsMap.get(highRUsers.get(i)).get(movieID) <= 1.5) {
+                    antiMovies.add(movieColl.getMap().get(movieID));
+                }
+            }
+        }
+
+        antiMovies.sort(new MovieYearComparator());
+
+        for (int i = 0; i < n; i++) {
+            System.out.println(antiMovies.get(i).getTitle() + " " + antiMovies.get(i).getYear());
+        }
+
 
     }
 
