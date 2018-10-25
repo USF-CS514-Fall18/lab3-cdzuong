@@ -69,79 +69,82 @@ public class RatingsCollection {
 
 
     public int rValue(int compare) {
-        double ratingUser;
-        double ratingOthers;
+
+
+        double xratingUser = 0.0;
+        double yratingOthers = 0.0;
         double sumProducts = 0;
         double sumUser = 0;
         double sumOther = 0;
         double sumUserSq = 0;
         double sumOtherSq = 0;
         double numerator;
-        double den1;
-        double den2;
-        double denominator;
+        double den1 = 0;
+        double den2 = 0;
+        double denominator = 0;
         double rValue = 0;
-        double rMax = 0;
+        double rMax = -1;
 
         double keep = 0;
-        int count = 1;
+        int count = 0;
 
         Map<Integer, Double> printer2 = ratingsMap.get(compare);
 
-        for (Map.Entry<Integer, TreeMap<Integer, Double>> printer : ratingsMap.entrySet()) {
-            System.out.println("new user!");
-            count = 0;
-            if (compare != printer.getKey()) {
-                for (Map.Entry<Integer, Double> ratingEntry : printer.getValue().entrySet()) {
-                    for (Map.Entry<Integer, Double> ratingEntry2 : printer2.entrySet()) {
-                        if (ratingEntry2.getKey() == ratingEntry.getKey()) {
-                            ratingUser = ratingEntry2.getValue();
-                            ratingOthers = ratingEntry.getValue();
-                            sumProducts += (ratingUser * ratingOthers);
-                            sumUser += ratingUser;
-                            sumOther += ratingOthers;
-                            sumUserSq += Math.pow(ratingUser, 2);
-                            sumOtherSq += Math.pow(ratingOthers, 2);
 
+        for (Integer userID : ratingsMap.keySet()) {
+            if (userID != compare) {
+                for (Integer movieID : ratingsMap.get(userID).keySet()) {
+
+                    // Have comparison ID, iterate through to to calculate r
+                    // values vs other users
+                    for (Integer movieID2 : ratingsMap.get(compare).keySet()) {
+                        if (movieID.equals(movieID2)) {
+                            System.out.println(userID + " (" + movieID + ") == " + compare + " ("+movieID2+") ? "+(movieID.equals(movieID2)));
+                            xratingUser = ratingsMap.get(compare).get(movieID2);
+                            yratingOthers = ratingsMap.get(userID).get(movieID);
+                            sumProducts += (xratingUser * yratingOthers);
+                            sumUser += xratingUser;
+                            sumOther += yratingOthers;
+                            sumUserSq += Math.pow(xratingUser, 2);
+                            sumOtherSq += Math.pow(yratingOthers, 2);
                             count++;
                         }
                     }
                 }
+
+
                 numerator = (count * sumProducts) - (sumUser * sumOther);
                 den1 = (count * sumUserSq) - Math.pow(sumUser, 2);
                 den2 = (count * sumOtherSq) - Math.pow(sumOther, 2);
                 denominator = sqrt(den1) * sqrt(den2);
                 rValue = numerator / denominator;
-                if (denominator != 0) {
-                    System.out.println("count " + count);
-                    System.out.println("NUMERATOR");
-                    System.out.println("sumProd" + sumProducts);
-                    System.out.println("sumUser" + sumUser);
-                    System.out.println("sumOther" + sumOther);
-                    System.out.println("DENOMINATOR");
-                    System.out.println("sumUserSq " + sumUserSq);
-                    System.out.println("sumOtherSq " + sumOtherSq);
-                    System.out.println("den1 " + den1);
-                    System.out.println("den2 " + den2);
-                    System.out.println("numerator " + numerator);
-                    System.out.println("denominator" + denominator);
-                    System.out.println(numerator + "/" + denominator);
-                    System.out.println("rValue" + rValue);
-                    System.out.println();
-                    System.out.println();
-                }
+                System.out.println("rVal" + rValue);
+
                 if (rValue > rMax) {
                     rMax = rValue;
-                    this.userMax = printer.getKey();
+                    this.userMax = userID;
                 }
-                sumUser = 0;
+
+                if (denominator != 0) {
+                    System.out.println("userId: " + userID + " // rValue: " + rValue + "// rMax: " + rMax);
+                }
                 sumProducts = 0;
+                sumUser = 0;
                 sumOther = 0;
-                sumOtherSq = 0;
                 sumUserSq = 0;
-                rValue = 0;
+                sumOtherSq = 0;
+                count = 0;
+
             }
         }
+
+
+
+        System.out.println(rMax);
+//                if (rValue > rMax) {
+//                    rMax = rValue;
+//                    this.userMax = printer.getKey();
+
         return userMax;
     }
 
@@ -208,7 +211,6 @@ public class RatingsCollection {
             for (Integer movieID : rankMovies.get(movieIdRatings).keySet()) {
                 movieList.add(rankMovies.get(movieIdRatings).get(movieID));
             }
-
         }
 
         System.out.println("breakpoint");
@@ -224,8 +226,6 @@ public class RatingsCollection {
             for (int i = 0; i < rankMovies.get(rating).size(); i++) {
                 System.out.println(movieMap.get(rating).get(i).getYear());
             }
-
-
         }
 
         System.out.println("the entire map");
@@ -248,23 +248,19 @@ public class RatingsCollection {
             for (int i = movieMap.get(0.0).size() - 1; i > movieMap.get(0.0).size() - (n + 1); i--) {
                 System.out.println(movieMap.get(0.0).get(i).getYear() + " " + movieMap.get(0.0).get(i).getTitle());
             }
-        }
-        else if (movieMap.get(0.5) != null) {
+        } else if (movieMap.get(0.5) != null) {
             for (int i = movieMap.get(0.5).size() - 1; i > movieMap.get(0.0).size() - (n + 1); i--) {
                 System.out.println(movieMap.get(0.5).get(i).getYear() + " " + movieMap.get(0.5).get(i).getTitle());
             }
-        }
-        else if (movieMap.get(1.0) != null) {
+        } else if (movieMap.get(1.0) != null) {
             for (int i = movieMap.get(1.0).size() - 1; i > movieMap.get(0.0).size() - (n + 1); i--) {
                 System.out.println(movieMap.get(1.0).get(i).getYear() + " " + movieMap.get(1.0).get(i).getTitle());
             }
-        }
-        else if (movieMap.get(1.5) != null) {
+        } else if (movieMap.get(1.5) != null) {
             for (int i = movieMap.get(1.5).size() - 1; i > movieMap.get(0.0).size() - (n + 1); i--) {
                 System.out.println(movieMap.get(1.5).get(i).getYear() + " " + movieMap.get(1.5).get(i).getTitle());
             }
-        }
-        else {
+        } else {
             System.out.println("No anti-recommendations to make.");
         }
 

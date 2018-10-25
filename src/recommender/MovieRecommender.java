@@ -19,17 +19,16 @@ public class MovieRecommender {
 //    //collection.printMap();
 //
       MovieCollection movCollection = new MovieCollection();
-    movCollection.addMovie("input/newSet/movies.csv");
+    movCollection.addMovie("input/oldSet/movies.csv");
 // movCollection.printMap();
 //        System.out.println("map printed!");
 
-       System.out.println(collection.rValue(3));
+        System.out.println("best match:" + collection.rValue(3));
 
        collection.rankList("input/newSet/movies.csv");
        collection.printRankList("input/newSet/movies.csv");
 
        collection.makeStarMovieList(5);
-
 
 ////
 //       collection.listTransfer();

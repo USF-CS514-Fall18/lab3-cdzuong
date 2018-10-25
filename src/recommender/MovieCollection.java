@@ -38,7 +38,14 @@ public class MovieCollection {
                 String[] splitLine;
                 String[] miniSplit;
                 String[] splitTitle;
-                if (lineRead.contains("\"")) {
+
+                if (lineRead.contains("7-")) {
+                    splitLine = lineRead.split(",");
+                    movieId = Integer.parseInt(splitLine[0]);
+                    title = splitLine[1].substring(0, splitLine[1].length() - 6);
+                    year = Integer.parseInt(splitLine[splitLine.length - 2].substring(splitLine[1].length() - 10, splitLine[1].length() - 6));
+                }
+                else if (lineRead.contains("\"")) {
                     splitLine = lineRead.split(",");
                     miniSplit = splitLine[splitLine.length - 2].split("\\(|\\)");
                     movieId = Integer.parseInt(splitLine[0]);
@@ -50,7 +57,8 @@ public class MovieCollection {
                     movieId = Integer.parseInt(splitLine[0]);
                     title = splitLine[1].substring(0, splitLine[1].length() - 6);
                     year = Integer.parseInt(splitLine[splitLine.length - 2].substring(splitLine[1].length() - 6, splitLine[1].length() - 2));
-                } else {
+                }
+                else {
                     splitLine = lineRead.split(",");
                     movieId = Integer.parseInt(splitLine[0]);
                     title = splitLine[1].substring(0, splitLine[1].length() - 6);
