@@ -23,10 +23,14 @@ public class MovieRecommender {
 // movCollection.printMap();
 //        System.out.println("map printed!");
 
-//        System.out.println(collection.rValue(18));
-//
+       System.out.println(collection.rValue(3));
+
        collection.rankList("input/newSet/movies.csv");
-       collection.printRankList();
+       collection.printRankList("input/newSet/movies.csv");
+
+       collection.makeStarMovieList(5);
+
+
 ////
 //       collection.listTransfer();
 ////       collection.sortList();

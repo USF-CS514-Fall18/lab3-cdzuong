@@ -6,6 +6,7 @@ import java.util.Scanner;
 import java.util.regex.*;
 
 public class Movie {
+    private int movieId;
     private String title;
     private int year;
 
@@ -41,19 +42,18 @@ public class Movie {
                 if (lineRead.contains("\"")) {
                     splitLine = lineRead.split(",");
                     miniSplit = splitLine[splitLine.length - 2].split("\\(|\\)");
-                    movieId = Integer.parseInt(splitLine[0]);
+                    this.movieId = Integer.parseInt(splitLine[0]);
                     this.year = Integer.parseInt(miniSplit[miniSplit.length - 2]);
                     splitTitle = lineRead.split("\"|\\(");
                     this.title = splitTitle[1];
                 } else if (lineRead.contains(") ,")) {
                     splitLine = lineRead.split(",");
-                    movieId = Integer.parseInt(splitLine[0]);
+                    this.movieId = Integer.parseInt(splitLine[0]);
                    this.title = splitLine[1].substring(0, splitLine[1].length() - 6);
                     this.year = Integer.parseInt(splitLine[splitLine.length - 2].substring(splitLine[1].length() - 6, splitLine[1].length() - 2));
                 } else {
                     splitLine = lineRead.split(",");
-                    ;
-                    movieId = Integer.parseInt(splitLine[0]);
+                    this.movieId = Integer.parseInt(splitLine[0]);
                     this.title = splitLine[1].substring(0, splitLine[1].length() - 6);
                     this.year = Integer.parseInt(splitLine[splitLine.length - 2].substring(splitLine[1].length() - 5, splitLine[1].length() - 1));
                 }
@@ -81,6 +81,10 @@ public class Movie {
      */
     public int getYear() {
         return year;
+    }
+
+    public int getMovieId() {
+        return movieId;
     }
 
 
