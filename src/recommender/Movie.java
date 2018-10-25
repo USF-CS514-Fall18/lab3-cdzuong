@@ -6,18 +6,12 @@ import java.util.Scanner;
 import java.util.regex.*;
 
 public class Movie {
-    private int movieId;
     private String title;
     private int year;
-    private int movieIdMax;
 
-    public Movie() {
-    }
-
-    public Movie(int movieId, String title, int year) {
-        this.movieId = movieId;
-        this.title = title;
-        this.year = year;
+    public Movie(String title, int year) {
+    this.title = title;
+    this.year = year;
     }
 
     public Movie(String filename) {
@@ -25,72 +19,49 @@ public class Movie {
             File file = new File(filename);
             Scanner input = new Scanner(file);
             input.nextLine();
+            int movieId = 0;
+            String title = "";
+            int year = 0;
+            while (input.hasNextLine()) {
+                String lineRead = input.nextLine();
+                String[] splitLine;
+                String[] miniSplit;
+                String[] splitTitle;
+                if (lineRead.contains("\"")) {
+                    System.out.println("HAS QUOTES");
+                    System.out.println(lineRead);
+                    splitLine = lineRead.split(",");
+                    miniSplit = splitLine[splitLine.length - 2].split("\\(|\\)");
+                    movieId = Integer.parseInt(splitLine[0]);
+                    System.out.println("movieId: " + movieId);
+                    this.year = Integer.parseInt(miniSplit[miniSplit.length - 2]);
+                    System.out.println("year: " + year);
+                    splitTitle = lineRead.split("\"|\\(");
+                    this.title = splitTitle[1];
+                    System.out.println(title);
 
-//            while (input.hasNextLine()) {
-//                if(input.nextLine().contains("\"")) {
-//                    System.out.println("HAS QUOTES");
-//                }
-//                else{
-//                    String[] splitLine = input.nextLine().split(",");
-//
-//                    movieId = Integer.parseInt(splitLine[0]);
-//                    title = splitLine[1];
-//                    System.out.println(title);
-//                    year = Integer.parseInt(splitLine[splitLine.length - 2]);
-//
-//                }
 
+                } else if (lineRead.contains(") ,")) {
+                    splitLine = lineRead.split(",");
+                    ;
+                    movieId = Integer.parseInt(splitLine[0]);
+                   this.title = splitLine[1].substring(0, splitLine[1].length() - 6);
+                    this.year = Integer.parseInt(splitLine[splitLine.length - 2].substring(splitLine[1].length() - 6, splitLine[1].length() - 2));
 
+                    System.out.println("movieId: " + movieId + " / title: " + title);
+                    System.out.println("year: " + year);
+                } else {
+                    splitLine = lineRead.split(",");
+                    ;
+                    movieId = Integer.parseInt(splitLine[0]);
+                    this.title = splitLine[1].substring(0, splitLine[1].length() - 6);
+                    this.year = Integer.parseInt(splitLine[splitLine.length - 2].substring(splitLine[1].length() - 5, splitLine[1].length() - 1));
 
-//                if (splitLine.length == 5) {
-//                    movieId = Integer.parseInt(splitLine[0]);
-//                    title = splitLine[1];
-//                    System.out.println(title);
-//                    year = Integer.parseInt(splitLine[2]);
-//                    System.out.println(year);
-//                }
-//                else if (splitLine.length == 6){
-//                    movieId = Integer.parseInt(splitLine[0]);
-//                    title = splitLine[1] + "/" + splitLine[2] + splitLine[3];
-//                    System.out.println(title);
-//                    year = Integer.parseInt(splitLine[4]);
-//                    System.out.println(year);
-//                }
-//                else if (splitLine.length == 7){
-//                    movieId = Integer.parseInt(splitLine[0]);
-//                    title = splitLine[1] + "/" + splitLine[2] + splitLine[3] + splitLine[4];
-//                    System.out.println(title);
-//                    year = Integer.parseInt(splitLine[5]);
-//                    System.out.println(year);
-//                }
-//                else if (splitLine.length == 8){
-//                    movieId = Integer.parseInt(splitLine[0]);
-//                    title = splitLine[1] + "/" + splitLine[2] + splitLine[3] + splitLine[4];
-//                    System.out.println(title);
-//                    year = Integer.parseInt(splitLine[5]);
-//                    System.out.println(year);
-//                }
-//                else if (splitLine.length == 9){
-//                    movieId = Integer.parseInt(splitLine[0]);
-//                    title = splitLine[1] + "/" + splitLine[2] + splitLine[3] + splitLine[4] + splitLine[5];
-//                    System.out.println(title);
-//                    year = Integer.parseInt(splitLine[6]);
-//                    System.out.println(year);
-//                }
-//                else if (splitLine.length == 10){
-//                    movieId = Integer.parseInt(splitLine[0]);
-//                    title = splitLine[1] + "/" + splitLine[2] + splitLine[3] + splitLine[4] + splitLine[5] + splitLine[6];
-//                    System.out.println(title);
-//                    year = Integer.parseInt(splitLine[7]);
-//                    System.out.println(year);
-//                }
-//                else if (splitLine.length == 11){
-//                    movieId = Integer.parseInt(splitLine[0]);
-//                    title = splitLine[1] + "/" + splitLine[2] + splitLine[3] + splitLine[4] + splitLine[5] + splitLine[6] + splitLine[7];
-//                    System.out.println(title);
-//                    year = Integer.parseInt(splitLine[8]);
-//                    System.out.println(year);
-//                }
+                    System.out.println("movieId: " + movieId + " / title: " + title);
+                    System.out.println("year: " + year);
+
+                }
+            }
 
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
@@ -99,9 +70,7 @@ public class Movie {
 
     }
 
-    public int getMovieId() {
-        return movieId;
-    }
+
 
     public String getTitle() {
         return title;
@@ -109,10 +78,6 @@ public class Movie {
 
     public int getYear() {
         return year;
-    }
-
-    public int getMovieIdMax() {
-        return movieIdMax;
     }
 
 

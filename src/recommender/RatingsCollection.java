@@ -2,10 +2,7 @@ package recommender;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 
 import static java.lang.Math.sqrt;
 
@@ -13,7 +10,7 @@ public class RatingsCollection {
     private Map<Integer, Map<Integer, Double>> ratingsMap;
     private int userMax;
     private ArrayList<Integer> movieList;
-    private Map<Double, Map<Integer, Integer>> rankMovies;
+    private Map<Double, Map<Integer, Movie>> rankMovies;
 
     public RatingsCollection() {
         ratingsMap = new TreeMap<>();
@@ -210,44 +207,73 @@ public class RatingsCollection {
 //    }
 
     public void rankList() {
-        Movie movie = new Movie();
+
+        System.out.println("rankList started");
+       int innerMovieId;
+       double rating;
+        MovieCollection movieColl = new MovieCollection();
+        Movie movieObject = movieColl.getMap().get(1);
+        System.out.println("this is movieObject Year: " + movieObject.getYear());
         Map<Integer, Double> printer = ratingsMap.get(userMax);
-        for (Map.Entry<Integer, Double> ratingEntry2 : printer.entrySet()) {
-            if (!rankMovies.containsKey(ratingEntry2.getValue())) {
-                rankMovies.put(ratingEntry2.getValue(), new TreeMap<>());
-                System.out.println(ratingEntry2.getValue());
+        for (Map.Entry<Integer, Double> userRatingMap : printer.entrySet()) {
+            innerMovieId = userRatingMap.getKey();
+
+            rating = userRatingMap.getValue();
+            if (!rankMovies.containsKey(userRatingMap.getValue())) {
+                rankMovies.put(rating, new TreeMap<>());
+                System.out.println("userRatingMapValue is " + userRatingMap.getValue());
             }
-            Map<Integer, Integer> movieInner;
-            movieInner = rankMovies.get(ratingEntry2.getValue());
-            movieInner.put(ratingEntry2.getKey(), movie.getYear());
+            Map<Integer, Movie> movieInner;
+            movieInner = rankMovies.get(rating);
+            movieInner.put(innerMovieId, movieObject);
+
         }
 
 
-        for (Map.Entry<Double, Map<Integer, Integer>> printer3 : rankMovies.entrySet()) {
-            for (Map.Entry<Integer, Integer> ratingEntry : printer3.getValue().entrySet()) {
-            }
-            System.out.println(rankMovies.keySet());
-        }
     }
 
     public void listTransfer() {
+        System.out.println("List Transfer Starting");
+
+        int movieId;
+        for (Map.Entry<Double, Map<Integer, Movie>> ratingEntry : rankMovies.entrySet()) {
+            for (Map.Entry<Integer, Movie> ratingEntry2 : ratingEntry.getValue().entrySet()) {
+                movieId = ratingEntry2.getKey();
+                System.out.println(ratingEntry2.getValue().getYear());
 
 
+                // this is the 5 star rankings
+                // call out the Movie objects for each item
+                // take out the year
+                // comparator the year
+                // add to arraylist
+                // continue for 4 star rankings, etc
 
-
-        for (Map.Entry<Double, Map<Integer, Integer>> ratingEntry : rankMovies.entrySet()) {
-            for (Map.Entry<Integer, Integer> ratingEntry2 : ratingEntry.getValue().entrySet()) {
-                if (ratingEntry.getKey() == 5.0) {
-                    System.out.println(ratingEntry.getKey() + "/" + ratingEntry2.getKey());
-                  //  movieList.add(ratingEntry);
-
-                }
             }
         }
+
     }
 
-
+//    public void sortList() {
+//        System.out.println("reached sortList");
+//        for (int i = 0; i < movieList.size(); i++) {
+//            System.out.println("BEFORE SORT");
+//            System.out.println(movieList.get(i).getTitle());
+//        }
+//        movieList.sort(new MovieYearComparator());
+//
+//        for (int i = 0; i < movieList.size(); i++) {
+//            System.out.println("AFTER SORT");
+//            System.out.println(movieList.get(i).getTitle());
+//        }
+//
+//    }
 }
+
+
+
+
+
 
 
 

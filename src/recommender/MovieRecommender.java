@@ -15,18 +15,20 @@ public class MovieRecommender {
      */
     public static void main(String[] args) {
       RatingsCollection collection = new RatingsCollection();
-  //    collection.addRatings("input/newSet/ratings.csv");
+      collection.addRatings("input/newSet/ratings.csv");
 //    //collection.printMap();
 //
       MovieCollection movCollection = new MovieCollection();
     movCollection.addMovie("input/newSet/movies.csv");
-    movCollection.printMap();
+// movCollection.printMap();
+//        System.out.println("map printed!");
 
-        System.out.println(collection.rValue(18));
+//        System.out.println(collection.rValue(18));
 //
-//        collection.rankList();
-//
-//        collection.listTransfer();
+       collection.rankList();
+////
+//       collection.listTransfer();
+////       collection.sortList();
 
     }
 }
