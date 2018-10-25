@@ -16,17 +16,9 @@ public class MovieRecommender {
      */
     public static void main(String[] args) {
         RatingsCollection collection = new RatingsCollection();
-        collection.addRatings("input/newSet/ratings.csv");
-
-        MovieCollection movCollection = new MovieCollection();
-        movCollection.addMovie("input/newSet/movies.csv");
-
-        collection.rValue(3);
-
-        collection.rankList("input/newSet/movies.csv");
-
-        collection.makeStarMovieList(3, 5, "input/newSet/movies.csv");
-
-
+        collection.addRatings(args[0]);
+        collection.rValue(Integer.parseInt(args[2]));
+        collection.rankList(args[0]);
+        collection.makeStarMovieList(Integer.parseInt(args[2]), Integer.parseInt(args[3]), args[0]);
     }
 }

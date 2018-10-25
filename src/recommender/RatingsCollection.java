@@ -57,7 +57,7 @@ public class RatingsCollection {
      */
     public void addRatings(String dir) {
         try {
-            File file = new File(dir);
+            File file = new File(dir + "/ratings.csv");
             Scanner input = new Scanner(file);
             input.nextLine();
             int userId;
@@ -78,7 +78,7 @@ public class RatingsCollection {
 
             }
         } catch (FileNotFoundException e) {
-            System.out.println("File not found.");
+            System.out.println("Ratings file not found." + dir + "/ratings.csv");
         }
     }
 
@@ -165,7 +165,7 @@ public class RatingsCollection {
         MovieCollection movieColl = new MovieCollection();
         TreeMap<Integer, Double> userRatingMap = ratingsMap.get(userMax);
 
-        movieColl.addMovie(dir);
+        movieColl.addMovie(dir + "/movies.csv");
 
         for (Integer movieIdRatings : userRatingMap.keySet()) {
             rating = userRatingMap.get(movieIdRatings);
@@ -220,13 +220,13 @@ public class RatingsCollection {
         }
 
         MovieCollection movieColl = new MovieCollection();
-        movieColl.addMovie(dir);
+        movieColl.addMovie(dir + "/movies.csv");
 
 
         System.out.println("Recommendations");
         if (n <= movieMap.get(5.0).size()) {
             for (int i = 0; i < n; i++) {
-                System.out.println(movieMap.get(5.0).get(i).getYear() + " " + movieMap.get(5.0).get(i).getTitle());
+                System.out.println(movieMap.get(5.0).get(i).getTitle() + " (" + movieMap.get(5.0).get(i).getYear() + ")");
             }
         } else {
             System.out.println("Choose a different number.");
@@ -245,7 +245,7 @@ public class RatingsCollection {
         antiMovies.sort(new MovieYearComparator());
 
         for (int i = 0; i < n; i++) {
-            System.out.println(antiMovies.get(i).getTitle() + " " + antiMovies.get(i).getYear());
+            System.out.println(antiMovies.get(i).getTitle() + " (" + antiMovies.get(i).getYear() + ")");
         }
 
 

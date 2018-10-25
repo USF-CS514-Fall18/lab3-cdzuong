@@ -69,7 +69,8 @@ public class MovieCollection {
             }
         }catch (
                 FileNotFoundException e) {
-            System.out.println("File not found.");
+
+            System.out.println("Movie file not found." + dir );
         }
 
     }
