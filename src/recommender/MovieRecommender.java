@@ -25,7 +25,8 @@ public class MovieRecommender {
 
 //        System.out.println(collection.rValue(18));
 //
-       collection.rankList();
+       collection.rankList("input/newSet/movies.csv");
+       collection.printRankList();
 ////
 //       collection.listTransfer();
 ////       collection.sortList();

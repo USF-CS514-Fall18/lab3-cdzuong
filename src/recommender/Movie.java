@@ -9,11 +9,22 @@ public class Movie {
     private String title;
     private int year;
 
+    /**
+     * Constructor class for Movie.
+     * @param title title of the movie
+     * @param year year in which movie was produced
+     */
     public Movie(String title, int year) {
     this.title = title;
     this.year = year;
     }
 
+    /**
+     * Reads in data from filename one line at a time. Splits each line by
+     * commas and assigns the movie title and production year values via
+     * the array produced by splitting the line.
+     * @param filename the file to be read and split to obtain information
+     */
     public Movie(String filename) {
         try {
             File file = new File(filename);
@@ -28,38 +39,23 @@ public class Movie {
                 String[] miniSplit;
                 String[] splitTitle;
                 if (lineRead.contains("\"")) {
-                    System.out.println("HAS QUOTES");
-                    System.out.println(lineRead);
                     splitLine = lineRead.split(",");
                     miniSplit = splitLine[splitLine.length - 2].split("\\(|\\)");
                     movieId = Integer.parseInt(splitLine[0]);
-                    System.out.println("movieId: " + movieId);
                     this.year = Integer.parseInt(miniSplit[miniSplit.length - 2]);
-                    System.out.println("year: " + year);
                     splitTitle = lineRead.split("\"|\\(");
                     this.title = splitTitle[1];
-                    System.out.println(title);
-
-
                 } else if (lineRead.contains(") ,")) {
                     splitLine = lineRead.split(",");
-                    ;
                     movieId = Integer.parseInt(splitLine[0]);
                    this.title = splitLine[1].substring(0, splitLine[1].length() - 6);
                     this.year = Integer.parseInt(splitLine[splitLine.length - 2].substring(splitLine[1].length() - 6, splitLine[1].length() - 2));
-
-                    System.out.println("movieId: " + movieId + " / title: " + title);
-                    System.out.println("year: " + year);
                 } else {
                     splitLine = lineRead.split(",");
                     ;
                     movieId = Integer.parseInt(splitLine[0]);
                     this.title = splitLine[1].substring(0, splitLine[1].length() - 6);
                     this.year = Integer.parseInt(splitLine[splitLine.length - 2].substring(splitLine[1].length() - 5, splitLine[1].length() - 1));
-
-                    System.out.println("movieId: " + movieId + " / title: " + title);
-                    System.out.println("year: " + year);
-
                 }
             }
 
@@ -71,11 +67,18 @@ public class Movie {
     }
 
 
-
+    /**
+     * Returns the title stored as the instance variable.
+     * @return movie title as a string
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Returns the year the movie was produced stored as the instance variable.
+     * @return the production year as an integer
+     */
     public int getYear() {
         return year;
     }
